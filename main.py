@@ -4,7 +4,7 @@ import io
 import sys
 
 PARAMETER = {'-s': '',  # parâmetro para o local do arquivo a ser escrito
-             '-d': '',  # parâmetro da string que armazena o que deve ser decodificado
+             '-d': b'',  # parâmetro da string que armazena o que deve ser decodificado
              '-c': '',  # parâmetro da string que armazena o que deve ser codificado
              '-o': ''}  # parâmetro para o local onde será escrito a string codificada ou decodificada
 
@@ -16,29 +16,27 @@ def set_parameter():
         if dash in PARAMETER.keys():
             PARAMETER[dash] = sys.argv[i + 1]
 
-# isso remove o \n no final de um texto
-def remove(pos, total):
-    if total[len(total)-2:len(total)] == '\n':
-        total = total[:len(total) - 2]
 
 
 # função retorna os bytes codificados
-def codificar(codigo):
-    temp = bytes(codigo, 'utf8')
-    return base64.encodebytes(temp)
+def codificar(codigo: str) -> bytes:
+    return base64.encodebytes(
+        bytes(codigo, 'utf-8')
+    )
 
 
 # função que retorna os bytes decodificados
 def decodificar(codigo):
-    ss = codigo[len(codigo)-5:len(codigo)]
     if codigo.__class__.__name__ == "str":
-        remove(ss, codigo)
-        # ss tem função elucidativa quando em debbuger
-        print(codigo[len(codigo)-5:len(codigo)])
-    if codigo.__class__.__name__!= "bytes":
-        codigo = bytes(codigo, 'utf8')
+        codigo.replace(chr(10), '')
+        codigo.replace(chr(13), '')
 
-    return base64.decodebytes(codigo)
+    if codigo.__class__.__name__!= "bytes":
+        codigo = bytes(codigo, 'utf-8')
+
+    return str(
+        base64.decodebytes(codigo), 'utf-8'
+    )
 
 
 # salva os bytes do parâmetro "codigo" para o arquivo do parâmetro "local" que é o lugar do arquivo
@@ -50,7 +48,7 @@ def arquivar(local, codigo):
 
 
 # lê a primeiro linha do arquivo "local" e retorna o que encontrou supondo que seja algo a ser utilizado
-def ler_de_arquivo(local):
+def ler_de_arquivo(local: str):
     file = io.open(local, "rb+")
     codigo = file.readline()
     return codigo
@@ -84,6 +82,7 @@ def main():
 if __name__ == "__main__":
     if len(sys.argv) == 0 or len(sys.argv) == 1:
         print(sys.argv)
+        print("nenhum parâmetro dado")# no given parameter
         sys.exit(0)
     elif sys.argv[1] == 'help' or sys.argv[1] == 'ajuda' or sys.argv[1] == 'help()' or sys.argv[1] == 'ajuda()':
         print("use -s para salvar no destino")
