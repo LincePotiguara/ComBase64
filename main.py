@@ -10,12 +10,11 @@ PARAMETER = {'-s': '',  # parâmetro para o local do arquivo a ser escrito
 
 
 # lê os parâmetros passados e os armazena nas devidas chaves
-def set_parameter():
-    for i in range(len(sys.argv)):
-        dash = sys.argv[i]
+def set_parameter(args: list):
+    for i in range(len(args)):
+        dash = args[i]
         if dash in PARAMETER.keys():
-            PARAMETER[dash] = sys.argv[i + 1]
-
+            PARAMETER[dash] = args[i + 1]
 
 
 # função retorna os bytes codificados
@@ -31,8 +30,9 @@ def decodificar(codigo):
         codigo.replace(chr(10), '')
         codigo.replace(chr(13), '')
 
-    if codigo.__class__.__name__!= "bytes":
+    if codigo.__class__.__name__ != "bytes":
         codigo = bytes(codigo, 'utf-8')
+
 
     return str(
         base64.decodebytes(codigo), 'utf-8'
@@ -60,7 +60,9 @@ def main():
             if PARAMETER['-c'] == '':
                 print(decodificar(PARAMETER['-d']))
             else:
-                print(codificar(PARAMETER['-c']))
+                print(
+                    str(codificar(PARAMETER['-c']), 'utf8')
+                )
         else:
             if PARAMETER['-c'] == '':
                 print(decodificar(ler_de_arquivo(PARAMETER['-o'])))
@@ -82,7 +84,7 @@ def main():
 if __name__ == "__main__":
     if len(sys.argv) == 0 or len(sys.argv) == 1:
         print(sys.argv)
-        print("nenhum parâmetro dado")# no given parameter
+        input("nenhum parâmetro dado")  # no given parameter
         sys.exit(0)
     elif sys.argv[1] == 'help' or sys.argv[1] == 'ajuda' or sys.argv[1] == 'help()' or sys.argv[1] == 'ajuda()':
         print("use -s para salvar no destino")
@@ -92,6 +94,6 @@ if __name__ == "__main__":
         print(sys.argv)
         sys.exit(0)
     else:
-        set_parameter()
+        set_parameter(sys.argv)
 
         main()
