@@ -3,14 +3,14 @@ import base64
 import io
 import sys
 
-PARAMETER = {'-s': '',  # parâmetro para o local do arquivo a ser escrito
-             '-d': b'',  # parâmetro da string que armazena o que deve ser decodificado
-             '-c': '',  # parâmetro da string que armazena o que deve ser codificado
-             '-o': ''}  # parâmetro para o local onde será escrito a string codificada ou decodificada
+PARAMETER = {'-s': '', # parâmetro para o local do arquivo a ser escrito
+             '-d': b'', # parâmetro da string que armazena o que deve ser decodificado
+             '-c': '', # parâmetro da string que armazena o que deve ser codificado
+             '-o': ''} # parâmetro para o local onde será escrito a string codificada ou decodificada
 
 
 # lê os parâmetros passados e os armazena nas devidas chaves
-def set_parameter(args: list):
+def set_parameter(args: list) -> None:
     for i in range(len(args)):
         dash = args[i]
         if dash in PARAMETER.keys():
@@ -25,7 +25,7 @@ def codificar(codigo: str) -> bytes:
 
 
 # função que retorna os bytes decodificados
-def decodificar(codigo):
+def decodificar(codigo) -> str:
     if codigo.__class__.__name__ == "str":
         codigo.replace(chr(10), '')
         codigo.replace(chr(13), '')
@@ -40,7 +40,7 @@ def decodificar(codigo):
 
 
 # salva os bytes do parâmetro "codigo" para o arquivo do parâmetro "local" que é o lugar do arquivo
-def arquivar(local, codigo):
+def arquivar(local, codigo) -> None:
     file = io.open(local, "wb+")
     file.write(codigo)
     print("escrito")
@@ -48,13 +48,13 @@ def arquivar(local, codigo):
 
 
 # lê a primeiro linha do arquivo "local" e retorna o que encontrou supondo que seja algo a ser utilizado
-def ler_de_arquivo(local: str):
+def ler_de_arquivo(local: str) -> bytes:
     file = io.open(local, "rb+")
     codigo = file.readline()
     return codigo
 
 
-def main():
+def dash() -> None:
     if PARAMETER['-s'] == '':
         if PARAMETER['-o'] == '':
             if PARAMETER['-c'] == '':
@@ -80,20 +80,19 @@ def main():
             else:
                 arquivar(PARAMETER['-s'], codificar(ler_de_arquivo(PARAMETER['-o'])))
 
-
-if __name__ == "__main__":
-    if len(sys.argv) == 0 or len(sys.argv) == 1:
-        print(sys.argv)
+def run(args: list) -> None:
+    if len(args) == 0 or len(args) == 1:
+        print(args)
         input("nenhum parâmetro dado")  # no given parameter
         sys.exit(0)
-    elif sys.argv[1] == 'help' or sys.argv[1] == 'ajuda' or sys.argv[1] == 'help()' or sys.argv[1] == 'ajuda()':
+    elif args[1] == 'help' or args[1] == 'ajuda' or args[1] == 'help()' or args[1] == 'ajuda()':
         print("use -s para salvar no destino")
         print("use -o para abrir o arquivo")
         print("use -c para encriptar")
         print("use -d para decodificar")
-        print(sys.argv)
+        print(args)
         sys.exit(0)
     else:
-        set_parameter(sys.argv)
+        set_parameter(args)
 
-        main()
+        dash()
