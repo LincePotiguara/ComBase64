@@ -55,30 +55,8 @@ def test_decodificar() -> None:
 
 
 # TODO testar: arquivar()
-# TODO testar: dash()
 # TODO testar: ler_de_arquivo()
-# TODO testar: set_parameter()
 
-# def test_dash(par: list) -> None:
-#     """it need to be in order:
-#     0 -> -s
-#     1 -> -d
-#     2 -> -c
-#     3 -> -d"""
-#     lista = combase.PARAMETER
-#     for arg in lista:
-#         if arg.__class__ == bytes:
-#             if arg == '-d':
-#                 lista[arg] = par[1]
-#         elif arg.__class__ == str:
-#             if arg == '-s':
-#                 lista[arg] = par[0]
-#             elif arg == '-c':
-#                 lista[arg] = par[2]
-#             elif arg == '-o':
-#                 lista[arg] = par[3]
-#         else:
-#             print("argument in PARAMETER is not str nor bytes")
 
 def test_set_par():
     args = [lorem_string, lorem_bytes, '', '']

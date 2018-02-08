@@ -116,5 +116,5 @@ Aperte Enter ser escrito no console """)
     dash()
 
 
-#prepare()
-run(sys.argv)
+# prepare()
+# run(sys.argv)
