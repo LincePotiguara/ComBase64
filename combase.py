@@ -10,11 +10,11 @@ PARAMETER = {'-s': '', # parâmetro para o local do arquivo a ser escrito
 
 
 # lê os parâmetros passados e os armazena nas devidas chaves
-def set_parameter(args: list) -> None:
+def set_parameter(args: list, container: dict) -> None:
     for i in range(len(args)):
         dash = args[i]
-        if dash in PARAMETER.keys():
-            PARAMETER[dash] = args[i + 1]
+        if dash in container.keys():
+            container[dash] = args[i + 1]
 
 
 # função retorna os bytes codificados
@@ -93,6 +93,28 @@ def run(args: list) -> None:
         print(args)
         sys.exit(0)
     else:
-        set_parameter(args)
+        # this will remove the archive name from args
+        args.reverse()
+        args.pop()
+        args.reverse()
 
+        set_parameter(args, PARAMETER)
         dash()
+
+def prepare() -> None:
+    open_from = ""
+    save_in = ""
+    deal_with = input("""Obtenha o resultado em base 64 usando -c [caracteres]
+Obtenha o resultado em ascii usando -d [caracteres] """)
+    print("")
+    _dash = deal_with[:2]
+    code = deal_with[3:]
+    files = input("""Use -o [arquivo] para ler do arquivo
+Use -s [arquivo] para salvar no arquivo
+Aperte Enter ser escrito no console """)
+    set_parameter([_dash, code], PARAMETER)
+    dash()
+
+
+#prepare()
+run(sys.argv)
